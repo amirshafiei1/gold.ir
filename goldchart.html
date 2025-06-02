@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قیمت زنده طلا</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#2563eb',
+secondary: '#4f46e5'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+@font-face {
+font-family: 'Vazirmatn';
+src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+}
+body {
+font-family: 'Vazirmatn', sans-serif;
+}
+</style>
+</head>
+<body class="bg-gray-50">
+<header class="bg-white shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center">
+<div class="font-['Pacifico'] text-2xl text-primary">amir sh</div>
+</div>
+<nav class="hidden md:flex space-x-8 space-x-reverse">
+<a href="#" class="text-gray-700 hover:text-primary px-3 py-2">قیمت زنده</a>
+<a href="#" class="text-gray-700 hover:text-primary px-3 py-2">نمودارها</a>
+<a href="#" class="text-gray-700 hover:text-primary px-3 py-2">اخبار و تحلیل‌ها</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="relative">
+<input type="text" placeholder="جستجو..." class="w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-button focus:outline-none focus:border-primary">
+<div class="absolute left-3 top-2.5 w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-search-line"></i>
+</div>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90">ورود / ثبت نام</button>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold">قیمت لحظه‌ای طلای ۱۸ عیار</h2>
+<div class="flex items-center gap-4">
+<span class="text-sm text-gray-500">آخرین به‌روزرسانی: ۱۴:۳۰:۲۵</span>
+<button class="flex items-center gap-2 text-primary hover:text-primary/90">
+<i class="ri-refresh-line"></i>
+<span>به‌روزرسانی</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="text-sm text-gray-500 mb-2">قیمت فعلی</div>
+<div class="text-2xl font-bold">۲۸,۵۴۰,۰۰۰ ریال</div>
+<div class="flex items-center gap-1 text-green-500 mt-2">
+<i class="ri-arrow-up-line"></i>
+<span>۲.۵٪</span>
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="text-sm text-gray-500 mb-2">بالاترین قیمت امروز</div>
+<div class="text-2xl font-bold">۲۸,۸۰۰,۰۰۰ ریال</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="text-sm text-gray-500 mb-2">پایین‌ترین قیمت امروز</div>
+<div class="text-2xl font-bold">۲۸,۲۰۰,۰۰۰ ریال</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold">نمودار قیمت طلای ۱۸ عیار</h2>
+<div class="flex gap-2">
+<button id="timeframe-1h" class="px-4 py-2 text-sm rounded-button bg-gray-100 hover:bg-gray-200">۱ ساعته</button>
+<button id="timeframe-4h" class="px-4 py-2 text-sm rounded-button bg-gray-100 hover:bg-gray-200">۴ ساعته</button>
+<button id="timeframe-1d" class="px-4 py-2 text-sm rounded-button bg-gray-100 hover:bg-gray-200">روزانه</button>
+<button id="timeframe-1w" class="px-4 py-2 text-sm rounded-button bg-gray-100 hover:bg-gray-200">هفتگی</button>
+<button id="timeframe-1m" class="px-4 py-2 text-sm rounded-button bg-gray-100 hover:bg-gray-200">ماهانه</button>
+</div>
+</div>
+<div id="chart" class="w-full h-[400px]"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h3 class="text-lg font-bold mb-4">قیمت‌های مرجع</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center pb-2 border-b">
+<span>اتحادیه طلا و جواهر</span>
+<span class="font-bold">۲۸,۵۴۰,۰۰۰ ریال</span>
+</div>
+<div class="flex justify-between items-center pb-2 border-b">
+<span>بازار آزاد</span>
+<span class="font-bold">۲۸,۵۶۰,۰۰۰ ریال</span>
+</div>
+<div class="flex justify-between items-center pb-2 border-b">
+<span>صرافی ملی</span>
+<span class="font-bold">۲۸,۵۲۰,۰۰۰ ریال</span>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h3 class="text-lg font-bold mb-4">تحلیل‌های تکنیکال</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center pb-2 border-b">
+<span>RSI</span>
+<span class="text-yellow-600">خنثی (۵۲)</span>
+</div>
+<div class="flex justify-between items-center pb-2 border-b">
+<span>MACD</span>
+<span class="text-green-600">خرید</span>
+</div>
+<div class="flex justify-between items-center pb-2 border-b">
+<span>میانگین متحرک</span>
+<span class="text-red-600">فروش</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white mt-12 border-t">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div>
+<h4 class="font-bold mb-4">درباره ما</h4>
+<p class="text-gray-600 text-sm">ارائه دهنده اطلاعات لحظه‌ای قیمت طلا و ارز با دقت بالا</p>
+</div>
+<div>
+<h4 class="font-bold mb-4">لینک‌های مفید</h4>
+<ul class="space-y-2 text-sm">
+<li><a href="#" class="text-gray-600 hover:text-primary">راهنمای استفاده</a></li>
+<li><a href="#" class="text-gray-600 hover:text-primary">سوالات متداول</a></li>
+<li><a href="#" class="text-gray-600 hover:text-primary">تماس با ما</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">شبکه‌های اجتماعی</h4>
+<div class="flex gap-4">
+<a href="https://@Shafieiamirhosein" data-readdy="true" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white">
+<i class="ri-telegram-line"></i>
+</a>
+<a href="https://www.instagram.com/amirshafiieei?igsh=Yml2cm13ZDJnajNt&utm_source=qr" data-readdy="true" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white">
+<i class="ri-instagram-line"></i>
+</a>
+<a href="#" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white">
+<i class="ri-twitter-x-line"></i>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-bold mb-4">خبرنامه</h4>
+<div class="flex gap-2">
+<input type="email" placeholder="ایمیل خود را وارد کنید" class="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-button focus:outline-none focus:border-primary">
+<button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90">عضویت</button>
+</div>
+</div>
+</div>
+<div class="border-t mt-8 pt-8 text-center text-sm text-gray-600">
+© ۱۴۰۴ تمامی حقوق محفوظ است
+</div>
+</div>
+</footer>
+<script id="chartInit">
+document.addEventListener('DOMContentLoaded', function() {
+const chart = echarts.init(document.getElementById('chart'));
+let currentTimeframe = '1h';
+let priceData = [];
+const baseOptions = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.9)',
+borderColor: '#e5e7eb',
+textStyle: { color: '#1f2937' }
+},
+grid: {
+top: 10,
+right: 10,
+bottom: 20,
+left: 60
+},
+xAxis: {
+type: 'category',
+axisLine: {
+lineStyle: { color: '#e5e7eb' }
+},
+axisLabel: { color: '#1f2937' }
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: { color: '#e5e7eb' }
+},
+axisLabel: {
+color: '#1f2937',
+formatter: value => (value / 1000000).toFixed(1) + 'M'
+},
+splitLine: {
+lineStyle: { color: '#f3f4f6' }
+}
+},
+series: [{
+type: 'line',
+smooth: true,
+symbol: 'none',
+itemStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.2)'
+}, {
+offset: 1,
+color: 'rgba(87, 181, 231, 0.05)'
+}])
+}
+}]
+};
+async function fetchPriceData(timeframe) {
+try {
+const response = await fetch(`https://api.example.com/gold/price?timeframe=${timeframe}`);
+if (!response.ok) throw new Error('Network response was not ok');
+const data = await response.json();
+return data;
+} catch (error) {
+console.error('Error fetching price data:', error);
+return null;
+}
+}
+async function updateChart(timeframe) {
+const data = await fetchPriceData(timeframe);
+if (!data) return;
+const option = {
+...baseOptions,
+xAxis: {
+...baseOptions.xAxis,
+data: data.timestamps
+},
+series: [{
+...baseOptions.series[0],
+data: data.prices
+}]
+};
+chart.setOption(option);
+}
+['1h', '4h', '1d', '1w', '1m'].forEach(timeframe => {
+document.getElementById(`timeframe-${timeframe}`).addEventListener('click', function() {
+document.querySelectorAll('[id^="timeframe-"]').forEach(btn => {
+btn.classList.remove('bg-primary', 'text-white');
+btn.classList.add('bg-gray-100');
+});
+this.classList.remove('bg-gray-100');
+this.classList.add('bg-primary', 'text-white');
+currentTimeframe = timeframe;
+updateChart(timeframe);
+});
+});
+window.addEventListener('resize', () => chart.resize());
+updateChart('1h');
+setInterval(() => {
+updateChart(currentTimeframe);
+}, 60000);
+});
+</script>
+</body>
+</html>
